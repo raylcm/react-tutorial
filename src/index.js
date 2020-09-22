@@ -54,6 +54,7 @@ class Square extends React.Component {
         }],
         xIsNext: true,
         stepNumber: 0,
+        datas: null,
       }
     }
 
@@ -94,6 +95,15 @@ class Square extends React.Component {
           <div className="game-info">
             <div>{status}</div>
             <ol>{moves}</ol>
+            <ul>
+                {this.state.datas != null?  
+                  this.state.datas.map(data=>( 
+                    <li key={data.date}>
+                        {data.date} {data.open} {data.high} {data.low} {data.close}
+                    </li>
+                  )) : null
+                }
+            </ul>
           </div>
         </div>
       );
@@ -117,6 +127,18 @@ class Square extends React.Component {
               stepNumber: history.length,
               xIsNext: !this.state.xIsNext});
      //   }
+
+     fetch("https://jsonmock.hackerrank.com/api/stocks/")
+      .then(resbody=>resbody.json())
+      .then(resobj=>this.setState({
+          history: this.state.history,
+          stepNumber: this.state.stepNumber,
+          xIsNext: this.state.xIsNext,
+          datas: resobj.data,
+                                  })
+      );
+
+
     }
 
     jumpTo(step){
